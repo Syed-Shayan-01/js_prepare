@@ -1,0 +1,3 @@
+In JavaScript, hoisting is a feature where function declarations and variable declarations
+are moved to the top of their scope (either the global scope or the function scope)
+during the execution phase

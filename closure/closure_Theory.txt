@@ -1,0 +1,2 @@
+A closure is a concept in JavaScript where an inner function has access to the variables or data of an outer function,
+even after the outer function has finished executing.

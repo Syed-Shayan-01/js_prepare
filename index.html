@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>John Doe - Innovative Designer & Developer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+      }
+      img {
+        max-width: 100%; /* Prevent images from causing overflow */
+        height: auto;
+      }
+      .gradient-text {
+        background: linear-gradient(45deg, #3b82f6, #2dd4bf);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .card-3d {
+        transition: all 0.3s ease-in-out;
+        transform-style: preserve-3d;
+        will-change: transform; /* Improve animation performance */
+      }
+      .card-3d:hover {
+        transform: translateY(-10px) rotateX(10deg) rotateY(10deg);
+        box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+      }
+      .text-shadow-3d {
+        text-shadow: 2px 2px 0 #3b82f6, 4px 4px 0 #2dd4bf;
+      }
+      .neon-border {
+        box-shadow: 0 0 10px #3b82f6, 0 0 20px #2dd4bf;
+      }
+      #hero-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw; /* Use viewport width */
+        height: 100vh; /* Use viewport height */
+        z-index: -1;
+      }
+      .full-height {
+        min-height: 100vh; /* Use min-height instead of height */
+        width: 100%; /* Ensure full width */
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- Navigation -->
+    <nav
+      x-data="{ open: false }"
+      class="bg-gray-900 bg-opacity-80 fixed w-full z-50 backdrop-filter backdrop-blur-lg"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <a href="#" class="text-2xl font-bold gradient-text">SS</a>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <a
+                href="#home"
+                class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300"
+                >Home</a
+              >
+              <a
+                href="#about"
+                class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300"
+                >About</a
+              >
+              <a
+                href="#portfolio"
+                class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300"
+                >Portfolio</a
+              >
+              <a
+                href="#services"
+                class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300"
+                >Services</a
+              >
+              <a
+                href="#contact"
+                class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+                >Contact</a
+              >
+            </div>
+          </div>
+          <div class="-mr-2 flex md:hidden">
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="block h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div x-show="open" class="md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a
+            href="#home"
+            class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >Home</a
+          >
+          <a
+            href="#about"
+            class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >About</a
+          >
+          <a
+            href="#portfolio"
+            class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >Portfolio</a
+          >
+          <a
+            href="#services"
+            class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >Services</a
+          >
+          <a
+            href="#contact"
+            class="bg-blue-600 text-white block px-3 py-2 rounded-md text-base font-medium"
+            >Contact</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      id="home"
+      class="relative full-height flex items-center justify-center"
+    >
+      <canvas id="hero-canvas"></canvas>
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <div class="relative z-10 text-center">
+        <h1 class="text-6xl md:text-8xl font-bold mb-4 text-shadow-3d">
+          Syed Shayan
+        </h1>
+        <h2 class="text-3xl md:text-4xl mb-6 gradient-text">
+          Innovative Designer & Developer
+        </h2>
+        <p class="text-xl mb-8 max-w-lg mx-auto">
+          Transforming ideas into captivating digital experiences.
+        </p>
+        <a
+          href="#contact"
+          class="bg-blue-600 text-white py-3 px-8 rounded-full font-bold text-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 neon-border"
+          >Let's Innovate Together</a
+        >
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-900">
+      <div class="container mx-auto px-4">
+        <h2 class="text-5xl font-bold mb-12 text-center gradient-text">
+          About Me
+        </h2>
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <div class="md:w-1/2 mb-8 md:mb-0">
+            <div class="relative">
+              <img
+                src="https://img.freepik.com/premium-vector/diverse-group-colleagues-collaborating-around-table-with-laptop-discussing-work-ideas_1280751-62775.jpg?w=400"
+                alt="John Doe"
+                class="rounded-lg shadow-2xl card-3d"
+              />
+              <!-- <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-blue-500 rounded-full opacity-50 blur-xl"></div> -->
+            </div>
+          </div>
+          <div class="md:w-1/2 md:pl-12">
+            <p class="text-lg mb-6">
+              With over 5 years of experience in UI/UX design and front-end
+              development, I specialize in creating intuitive and visually
+              stunning digital experiences. My passion lies in pushing the
+              boundaries of design and technology to solve complex problems and
+              deliver exceptional results.
+            </p>
+            <p class="text-lg mb-6">
+              I've collaborated with startups and established companies, helping
+              them achieve their goals through innovative design solutions and
+              cutting-edge development techniques.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition duration-300 transform hover:scale-105"
+                ><i class="fab fa-linkedin mr-2"></i>LinkedIn</a
+              >
+              <a
+                href="#"
+                class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-full transition duration-300 transform hover:scale-105"
+                ><i class="fab fa-github mr-2"></i>GitHub</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 bg-gray-800">
+      <div class="container mx-auto px-4">
+        <h2 class="text-5xl font-bold mb-12 text-center gradient-text">
+          My Portfolio
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg card-3d">
+            <img
+              src="https://source.unsplash.com/random/400x300?website"
+              alt="Project 1"
+              class="w-full"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-bold mb-2 gradient-text">
+                E-commerce Platform
+              </h3>
+              <p class="text-gray-400 mb-4">
+                A fully responsive e-commerce solution with advanced features
+                and sleek design.
+              </p>
+              <a
+                href="#"
+                class="text-blue-400 hover:text-blue-300 transition duration-300"
+                >Explore Project <i class="fas fa-arrow-right ml-2"></i
+              ></a>
+            </div>
+          </div>
+          <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg card-3d">
+            <img
+              src="https://source.unsplash.com/random/400x300?app"
+              alt="Project 2"
+              class="w-full"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-bold mb-2 gradient-text">
+                Fitness Tracking App
+              </h3>
+              <p class="text-gray-400 mb-4">
+                An intuitive mobile app for fitness enthusiasts with real-time
+                tracking and analytics.
+              </p>
+              <a
+                href="#"
+                class="text-blue-400 hover:text-blue-300 transition duration-300"
+                >Explore Project <i class="fas fa-arrow-right ml-2"></i
+              ></a>
+            </div>
+          </div>
+          <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg card-3d">
+            <img
+              src="https://source.unsplash.com/random/400x300?branding"
+              alt="Project 3"
+              class="w-full"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-bold mb-2 gradient-text">
+                Tech Startup Branding
+              </h3>
+              <p class="text-gray-400 mb-4">
+                A comprehensive brand identity design for an innovative tech
+                startup.
+              </p>
+              <a
+                href="#"
+                class="text-blue-400 hover:text-blue-300 transition duration-300"
+                >Explore Project <i class="fas fa-arrow-right ml-2"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-900">
+      <div class="container mx-auto px-4">
+        <h2 class="text-5xl font-bold mb-12 text-center gradient-text">
+          My Services
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="p-8 bg-gray-800 rounded-lg card-3d">
+            <i class="fas fa-paint-brush text-5xl text-blue-500 mb-6"></i>
+            <h3 class="text-2xl font-bold mb-4 gradient-text">UI/UX Design</h3>
+            <p class="text-gray-400">
+              Crafting intuitive and visually stunning user interfaces that
+              elevate the user experience to new heights.
+            </p>
+          </div>
+          <div class="p-8 bg-gray-800 rounded-lg card-3d">
+            <i class="fas fa-code text-5xl text-blue-500 mb-6"></i>
+            <h3 class="text-2xl font-bold mb-4 gradient-text">
+              Front-end Development
+            </h3>
+            <p class="text-gray-400">
+              Building responsive and high-performance websites using
+              cutting-edge web technologies and best practices.
+            </p>
+          </div>
+          <div class="p-8 bg-gray-800 rounded-lg card-3d">
+            <i class="fas fa-bullhorn text-5xl text-blue-500 mb-6"></i>
+            <h3 class="text-2xl font-bold mb-4 gradient-text">
+              Brand Identity Design
+            </h3>
+            <p class="text-gray-400">
+              Developing cohesive and memorable brand identities that resonate
+              with your target audience and stand out in the market.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-800">
+      <div class="container mx-auto px-4">
+        <h2 class="text-5xl font-bold mb-12 text-center gradient-text">
+          Get in Touch
+        </h2>
+        <div class="max-w-lg mx-auto">
+          <form action="#" method="POST" class="space-y-6">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-300"
+                >Name</label
+              >
+              <input
+                type="text"
+                name="name"
+                id="name"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+              />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-300"
+                >Email</label
+              >
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+              />
+            </div>
+            <div>
+              <label
+                for="message"
+                class="block text-sm font-medium text-gray-300"
+                >Message</label
+              >
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+              ></textarea>
+            </div>
+            <div>
+              <button
+                type="submit"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 transform hover:scale-105 neon-border"
+              >
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-between items-center">
+          <div class="w-full md:w-1/3 text-center md:text-left mb-6 md:mb-0">
+            <h3 class="text-2xl font-bold mb-2 gradient-text">John Doe</h3>
+            <p class="text-gray-400">Innovative Designer & Developer</p>
+          </div>
+          <div class="w-full md:w-1/3 text-center mb-6 md:mb-0">
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white mx-2 transition duration-300 transform hover:scale-110 inline-block"
+              ><i class="fab fa-twitter text-2xl"></i
+            ></a>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white mx-2 transition duration-300 transform hover:scale-110 inline-block"
+              ><i class="fab fa-linkedin text-2xl"></i
+            ></a>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white mx-2 transition duration-300 transform hover:scale-110 inline-block"
+              ><i class="fab fa-github text-2xl"></i
+            ></a>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white mx-2 transition duration-300 transform hover:scale-110 inline-block"
+              ><i class="fab fa-dribbble text-2xl"></i
+            ></a>
+          </div>
+          <div class="w-full md:w-1/3 text-center md:text-right">
+            <p class="text-gray-400">
+              &copy; 2023 John Doe. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const canvas = document.getElementById("hero-canvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      const particles = [];
+      const particleCount = 100;
+      let hue = 0;
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 5 + 1;
+          this.speedX = Math.random() * 3 - 1.5;
+          this.speedY = Math.random() * 3 - 1.5;
+          this.color = `hsl(${hue}, 100%, 50%)`;
+        }
+
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+
+          if (this.size > 0.2) this.size -= 0.1;
+
+          if (this.x < 0) this.x = canvas.width;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.y < 0) this.y = canvas.height;
+          if (this.y > canvas.height) this.y = 0;
+        }
+
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function createParticles() {
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+      }
+
+      function handleParticles() {
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+
+          for (let j = i; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 100) {
+              ctx.beginPath();
+              ctx.strokeStyle = particles[i].color;
+              ctx.lineWidth = 0.2;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
+
+          if (particles[i].size <= 0.3) {
+            particles.splice(i, 1);
+            i--;
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        handleParticles();
+        hue += 0.5;
+        requestAnimationFrame(animate);
+
+        while (particles.length < particleCount) {
+          particles.push(new Particle());
+        }
+      }
+
+      createParticles();
+      animate();
+
+      // Scroll Animations
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Hero Section Animation
+      gsap.from("#home h1, #home h2, #home p, #home a", {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: "#home",
+          start: "top center",
+        },
+      });
+
+      // About Section Animation
+      gsap.from("#about img", {
+        opacity: 0,
+        x: -100,
+        duration: 1,
+        scrollTrigger: {
+          trigger: "#about",
+          start: "top 80%",
+        },
+      });
+
+      gsap.from("#about .md\\:w-1\\/2:last-child", {
+        opacity: 0,
+        x: 100,
+        duration: 1,
+        scrollTrigger: {
+          trigger: "#about",
+          start: "top 80%",
+        },
+      });
+
+      // Portfolio Section Animation
+      gsap.from("#portfolio .card-3d", {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: "#portfolio",
+          start: "top 80%",
+        },
+      });
+
+      // Services Section Animation
+      gsap.from("#services .card-3d", {
+        opacity: 0,
+        scale: 0.8,
+        stagger: 0.2,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: "#services",
+          start: "top 80%",
+        },
+      });
+
+      // Contact Section Animation
+      gsap.from("#contact form", {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        scrollTrigger: {
+          trigger: "#contact",
+          start: "top 80%",
+        },
+      });
+    </script>
+  </body>
+</html>
